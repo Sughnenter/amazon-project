@@ -14,7 +14,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-name limit-text-to-2-lines">
-           ${product.name}
+            ${product.name}
           </div>
 
           <div class="product-rating-container">
@@ -27,8 +27,8 @@ products.forEach((product) => {
 
           <div class="product-price">$${formatCurrency(product.priceCents)}</div>
 
-          <div class="product-quantity-container">
-            <select>
+          <div class="product-quantity-container ">
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -59,14 +59,24 @@ products.forEach((product) => {
 
 document.querySelector('.js-products-grid').innerHTML = productsHtml;
 
+export function calculateCartQuantity(){
+  let cartQuantity = 0;
+
+  cart.forEach(cartItem => {
+    cartQuantity += Number(cartItem.quantity);
+  });
+}
 
 function updateCartQuantity() {
   let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
-  })
+
+  cart.forEach(cartItem => {
+    cartQuantity += Number(cartItem.quantity);
+  });
+
+  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
 }
+updateCartQuantity()
 
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
@@ -75,4 +85,5 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     updateCartQuantity();
   })
 })
+
 
