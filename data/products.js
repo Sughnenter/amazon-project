@@ -1,47 +1,47 @@
 import { formatCurrency } from "../scripts/utils/money.js";
 
-export function getProduct(productId){
-    let matchingProduct;
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product
-      }
-    })
-    return matchingProduct
+export function getProduct(productId) {
+  let matchingProduct;
+  products.forEach((product) => {
+    if (product.id === productId) {
+      matchingProduct = product
+    }
+  })
+  return matchingProduct
 }
 
-class Product{
+class Product {
   id;
   image;
   name;
   rating;
   priceCents;
 
-  constructor (productDetails){
+  constructor(productDetails) {
     this.id = productDetails.id
     this.image = productDetails.image
     this.name = productDetails.name
     this.rating = productDetails.rating
-    this.priceCents =  productDetails.priceCents
+    this.priceCents = productDetails.priceCents
   }
-  getStarsUrl(){
+  getStarsUrl() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
-  getPrice(){
+  getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
-  extraInfoHTML(){
+  extraInfoHTML() {
     return ''
   }
 }
-class clothing extends Product{
+class clothing extends Product {
   sizeChartLink;
-  constructor(productDetails){
+  constructor(productDetails) {
     super(productDetails);
     this.sizeChartLink = productDetails.sizeChartLink;
   }
-  extraInfoHTML(){
-    return`
+  extraInfoHTML() {
+    return `
       <a href="${this.sizeChartLink}" target="_blank">Size chart</a>
     `
   }
@@ -70,7 +70,25 @@ const object3 = {method:()=>{
 }}
 object3.method();
 */
+export let products = []
 
+export function loadProducts(fun) {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener('load', () => {
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
+    console.log('load products');
+    fun()
+  })
+  xhr.open('GET', 'https://supersimplebackend.dev/products');
+  xhr.send();
+}
+
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -736,3 +754,5 @@ export const products = [
   }
   return new Product(productDetails);
 });
+
+*/
