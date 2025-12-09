@@ -1,5 +1,6 @@
 import { loadFromStorage } from "../../data/cart.js";
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
+import { loadProducts } from "../../data/products.js";
 describe('Test Suite: Render order Summary', () => {
   it('displays the cart', () => {
     document.querySelector('.js-test-container').innerHTML = `
