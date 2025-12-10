@@ -6,13 +6,21 @@ import { loadCart } from '../data/cart.js';
 //import '../data/cart-class.js'
 
 
-async function loadPage(){
-  await loadProductsFetch();
-  await new Promise((resolve)=>{
-    loadCart(()=>{
-      resolve();
-    });
-  })
+async function loadPage() {
+  try {
+    //throw 'error1'
+    await loadProductsFetch();
+    await new Promise((resolve, reject) => {
+      //throw 'error2'
+      loadCart(() => {
+        //reject('error 3')
+        resolve();
+      });
+    })
+  } catch(error){
+    console.log('error loading products please try again later')
+  }
+  
   renderOrderSummary();
   renderPaymentSummary();
 }
@@ -20,7 +28,7 @@ loadPage()
 
 /*
 Promise.all([
-  loadProductsFetch(), 
+  loadProductsFetch(),
   new Promise((resolve)=>{
     loadCart(()=>{
       resolve();
@@ -33,7 +41,7 @@ Promise.all([
 */
 /*
 new Promise((resolve)=>{
-  loadProducts(()=>{ 
+  loadProducts(()=>{
     resolve();
   })
 
